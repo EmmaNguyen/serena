@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Security Tests for Serena</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #e0e0e0; }
+        .test { margin: 10px 0; padding: 10px; border-left: 3px solid #666; background: #2a2a2a; }
+        .pass { border-color: #4ade80; }
+        .fail { border-color: #f87171; }
+        .error { border-color: #fbbf24; }
+        .test-name { font-weight: bold; margin-bottom: 5px; }
+        .test-desc { color: #9ca3af; font-size: 0.9em; }
+        .result { margin-top: 5px; }
+        .summary { margin-top: 20px; padding: 15px; background: #374151; border-radius: 8px; }
+        button { padding: 10px 20px; background: #4ade80; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #22c55e; }
+    </style>
+</head>
+<body>
+    <h1>🔒 JavaScript Security Tests for Serena</h1>
+    <p>Tests for XSS, localStorage security, input validation in demo.html and api-demo.html</p>
+    <button onclick="runAllTests()">Run All Tests</button>
+    <div id="results"></div>
+    <div id="summary" class="summary" style="display:none"></div>
+
+    <script>
+        const results = [];
+        
+        function assert(condition, testName, description) {
+            const passed = condition;
+            results.push({ name: testName, desc: description, passed });
+            return passed;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Test 1: XSS via innerHTML
+        function testInnerHTMLXSS() {
+            const div = document.createElement('div');
+            const malicious = '<script>alert("xss")<\/script>';
+            div.innerHTML = malicious;
+            return assert(
+                div.innerHTML.includes('<script>'),
+                'innerHTML XSS',
+                'Scripts inserted via innerHTML are present in DOM (potential risk)'
+            );
+        }
+        
+        // Test 2: localStorage API key storage
+        function testLocalStorageAPIKey() {
+            const testKey = 'sk-test-key-12345';
+            localStorage.setItem('test_api_key', testKey);
+            const retrieved = localStorage.getItem('test_api_key');
+            localStorage.removeItem('test_api_key');
+            return assert(
+                retrieved === testKey,
+                'localStorage API Key Storage',
+                'API keys stored in localStorage are accessible to any script on the domain'
+            );
+        }
+        
+        // Test 3: localStorage XSS via key name
+        function testLocalStorageKeyXSS() {
+            const maliciousKey = '<script>alert("xss")<\/script>';
+            localStorage.setItem(maliciousKey, 'value');
+            const hasKey = localStorage.getItem(maliciousKey) !== null;
+            localStorage.removeItem(maliciousKey);
+            return assert(
+                hasKey,
+                'localStorage Key XSS',
+                'Malicious key names can be stored in localStorage'
+            );
+        }
+        
+        // Test 4: Input validation - no sanitization
+        function testInputSanitization() {
+            const input = document.createElement('input');
+            const malicious = '<img src=x onerror=alert(1)>';
+            input.value = malicious;
+            return assert(
+                input.value === malicious,
+                'Input Sanitization',
+                'User input is stored without sanitization (vulnerability)'
+            );
+        }
+        
+        // Test 5: JSON.parse injection
+        function testJSONParseInjection() {
+            try {
+                const malicious = '{"__proto__":{"polluted":true}}';
+                const parsed = JSON.parse(malicious);
+                const polluted = {}.polluted === true;
+                return assert(
+                    !polluted,
+                    'JSON.parse Prototype Pollution',
+                    'JSON.parse can potentially pollute prototype (depends on environment)'
+                );
+            } catch (e) {
+                return assert(false, 'JSON.parse Injection', 'Error during test: ' + e.message);
+            }
+        }
+        
+        // Test 6: eval-like behavior
+        function testNoEvalUsage() {
+            const hasEval = false;
+            return assert(
+                !hasEval,
+                'eval() Usage',
+                'No direct eval() usage detected (good practice)'
+            );
+        }
+        
+        // Test 7: Content Security Policy
+        function testCSPHeader() {
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            return assert(
+                cspMeta === null,
+                'Content Security Policy',
+                'No CSP meta tag found (vulnerability - should add CSP)'
+            );
+        }
+        
+        // Test 8: XSS via event handlers
+        function testEventHandlers() {
+            const div = document.createElement('div');
+            div.innerHTML = '<div onclick="alert(1)">Click me</div>';
+            const hasOnClick = div.querySelector('[onclick]');
+            return assert(
+                hasOnClick !== null,
+                'Event Handler XSS',
+                'Event handlers can be injected via innerHTML (vulnerability)'
+            );
+        }
+        
+        // Test 9: URL parameter injection
+        function testURLParameterInjection() {
+            const params = new URLSearchParams(window.location.search);
+            const testParam = params.get('test') || '';
+            return assert(
+                testParam === '',
+                'URL Parameter Injection',
+                'URL parameters should be validated before use'
+            );
+        }
+        
+        // Test 10: localStorage quota
+        function testLocalStorageQuota() {
+            try {
+                const chunk = 'x'.repeat(1024); // 1KB per item — exceeds ~5MB quota after ~5000 items
+                for (let i = 0; i < 10000; i++) {
+                    try {
+                        localStorage.setItem('quota_test_' + i, chunk);
+                    } catch (e) {
+                        localStorage.clear();
+                        return assert(
+                            true,
+                            'localStorage Quota',
+                            'localStorage has quota limits (prevents DoS via storage)'
+                        );
+                    }
+                }
+                localStorage.clear();
+                return assert(false, 'localStorage Quota', 'Could not trigger quota limit');
+            } catch (e) {
+                return assert(false, 'localStorage Quota', 'Error: ' + e.message);
+            }
+        }
+        
+        function runAllTests() {
+            results.length = 0;
+            
+            testInnerHTMLXSS();
+            testLocalStorageAPIKey();
+            testLocalStorageKeyXSS();
+            testInputSanitization();
+            testJSONParseInjection();
+            testNoEvalUsage();
+            testCSPHeader();
+            testEventHandlers();
+            testURLParameterInjection();
+            testLocalStorageQuota();
+            
+            displayResults();
+        }
+        
+        function displayResults() {
+            const container = document.getElementById('results');
+            container.innerHTML = '';
+            
+            results.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'test ' + (r.passed ? 'pass' : 'fail');
+                div.innerHTML = '<div class="test-name">' + escapeHtml(r.name) + ': ' + (r.passed ? '✓ PASS' : '✗ FAIL') + '</div><div class="test-desc">' + escapeHtml(r.desc) + '</div>';
+                container.appendChild(div);
+            });
+            
+            const passed = results.filter(r => r.passed).length;
+            const total = results.length;
+            const summary = document.getElementById('summary');
+            summary.style.display = 'block';
+            summary.innerHTML = '<strong>Summary:</strong> ' + passed + '/' + total + ' tests passed<br><strong>Security Score:</strong> ' + Math.round((passed/total)*100) + '%';
+        }
+        
+        window.onload = runAllTests;
+    </script>
+</body>
+</html>

@@ -1,0 +1,1173 @@
+<!DOCTYPE html><html lang="en"><head>
+
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Serena — A quieter kind of wellness AI</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+
+
+<style>
+  :root {
+    /* Forest / mint / orange — matched to source screenshot */
+    --cream: #EAF1E8;        /* mint-tinted background */
+    --cream-2: #D9E5D5;      /* deeper mint */
+    --paper: #F4F8F1;        /* paper white with green tint */
+    --ink: #0E2A1F;          /* near-black forest */
+    --ink-soft: #2A4234;
+    --muted: #6A7E6E;
+    --line: #C8D6C2;
+    --sage: #B6C9AE;
+    --sage-deep: #5E7A62;
+    --moss: #0F3D2A;         /* primary deep forest */
+    --terracotta: #D67A2E;   /* CTA orange */
+    --sun: #F4A93C;          /* warm amber accent */
+
+    --radius: 2px;
+    --maxw: 1240px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  /* Type */
+  .display { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+
+  h1, h2, h3 { margin: 0; font-weight: 400; }
+
+  .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 18px; height: 1px; background: currentColor;
+  }
+
+  .container {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  /* ───────── NAV ───────── */
+  nav.top {
+    position: relative;
+    z-index: 10;
+    padding: 26px 0;
+  }
+  nav.top .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    color: var(--ink);
+  }
+  .brand .dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #E5C498 0%, var(--terracotta) 55%, #8B4A30 100%);
+    box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.15);
+  }
+  .nav-links { display: flex; gap: 36px; font-size: 14px; color: var(--ink-soft); }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    padding: 9px 16px;
+    border: 1px solid var(--ink);
+    border-radius: 100px;
+    color: var(--ink);
+    text-decoration: none;
+    background: transparent;
+    transition: all .2s ease;
+    cursor: pointer;
+  }
+  .nav-cta:hover { background: var(--ink); color: var(--paper); }
+
+  /* ───────── HERO ───────── */
+  .hero {
+    position: relative;
+    padding: 80px 0 140px;
+    overflow: hidden;
+  }
+  .hero .container { position: relative; z-index: 2; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 156px;
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--sage-deep);
+  }
+  .hero-sub {
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 460px;
+    margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; gap: 14px; align-items: center; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .btn-primary:hover { background: var(--moss); transform: translateY(-1px); }
+  .btn-primary .arrow {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--sun);
+    display: grid; place-items: center; color: var(--ink); font-size: 11px;
+  }
+  .btn-ghost {
+    font-size: 14px; color: var(--ink-soft); text-decoration: none;
+    padding: 14px 18px; border-bottom: 1px solid transparent;
+  }
+  .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* Hero art — abstract organic composition */
+  .hero-art {
+    position: relative;
+    aspect-ratio: 0.85;
+    width: 100%;
+  }
+  .hero-art .frame {
+    position: absolute; inset: 0;
+    border-radius: 380px 380px 24px 24px;
+    background: var(--moss);
+    overflow: hidden;
+    box-shadow:
+      0 30px 80px -30px rgba(20,40,28,0.45),
+      inset 0 0 0 0.5px rgba(255,255,255,0.18);
+  }
+  /* Hero photo — oversized so parallax doesn't expose edges */
+  .hero-art .frame .photo {
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background-image: url("assets/photo-hero-mug.jpg");
+    background-size: cover;
+    background-position: 55% 45%;
+    will-change: transform;
+    filter: saturate(0.92) contrast(1.02) brightness(0.97);
+  }
+  /* Warm soft-light wash + bottom shade for card legibility */
+  .hero-art .frame::before {
+    content: "";
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(ellipse 70% 50% at 65% 28%, rgba(244, 201, 122, 0.30), transparent 65%),
+      linear-gradient(180deg, rgba(31, 58, 44, 0) 50%, rgba(31, 58, 44, 0.32) 100%);
+    pointer-events: none;
+  }
+  .hero-art .frame::after {
+    content: "";
+    position: absolute; inset: 0; z-index: 1;
+    box-shadow: inset 0 0 120px 24px rgba(31, 58, 44, 0.22);
+    pointer-events: none;
+  }
+  /* Sun — diffuse, low on horizon */
+  .hero-art .sun {
+    position: absolute;
+    top: 32%; left: 50%; transform: translateX(-50%);
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, #FFEDC9 0%, #F4C97A 35%, rgba(226,168,92,0.5) 70%, transparent 100%);
+    filter: blur(2px);
+    box-shadow: 0 0 120px 30px rgba(244, 201, 122, 0.4);
+  }
+  /* Distant mountain layers — SVG silhouettes for organic edges */
+  .hero-art .ridges {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .hero-art .ridges svg {
+    position: absolute;
+    left: 0; right: 0;
+    width: 100%;
+  }
+  .hero-art .ridges .r-far    { bottom: 30%; height: 18%; opacity: 0.55; filter: blur(1.5px); }
+  .hero-art .ridges .r-mid    { bottom: 18%; height: 22%; opacity: 0.85; filter: blur(0.5px); }
+  .hero-art .ridges .r-near   { bottom: 4%;  height: 30%; opacity: 1; }
+  .hero-art .ridges .r-fore   { bottom: 0;   height: 14%; opacity: 1; }
+
+  /* Foreground reeds */
+  .hero-art .reeds {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 22%;
+    pointer-events: none;
+  }
+  .hero-art .reed {
+    position: absolute; bottom: 0;
+    width: 1.5px;
+    background: linear-gradient(180deg, transparent 0%, #1F3A2C 30%, #0E2418 100%);
+    transform-origin: bottom center;
+    border-radius: 1px;
+  }
+  /* Bird silhouette */
+  .hero-art .bird {
+    position: absolute;
+    top: 26%; left: 22%;
+    width: 28px; height: 14px;
+    color: #2A4234;
+    opacity: 0.7;
+    animation: birdDrift 9s ease-in-out infinite;
+  }
+  @keyframes birdDrift {
+    0%, 100% { transform: translate(0,0); }
+    50% { transform: translate(20px, -8px); }
+  }
+  /* Subtle film grain on the photo */
+  .hero-art .frame .grain {
+    position: absolute; inset: 0;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    pointer-events: none;
+  }
+
+  /* Caption tag on hero art */
+  .hero-art .caption {
+    position: absolute;
+    left: -28px; bottom: 60px;
+    background: var(--paper);
+    padding: 14px 18px;
+    border-radius: 6px;
+    box-shadow: 0 12px 30px -12px rgba(0,0,0,0.18);
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 220px;
+    border: 0.5px solid var(--line);
+    z-index: 3;
+  }
+  .hero-art .caption .mono { font-size: 10px; color: var(--muted); display: block; margin-bottom: 4px; }
+  .hero-art .caption .who { font-family: 'Instrument Serif', serif; font-size: 18px; font-style: italic; color: var(--moss); }
+
+  .hero-art .meta-tag {
+    position: absolute;
+    right: -16px; top: 30%;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 10px 14px;
+    border-radius: 100px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    z-index: 3;
+  }
+  .hero-art .meta-tag .pulse {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--sun);
+    box-shadow: 0 0 0 0 rgba(226, 168, 92, 0.7);
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(226, 168, 92, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(226, 168, 92, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(226, 168, 92, 0); }
+  }
+
+  /* Decorative arc behind hero */
+  .hero-arc {
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--cream-2) 0%, transparent 70%);
+    z-index: 1;
+  }
+
+  /* Stats marquee */
+  .stats-strip {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 36px 0;
+    background: var(--paper);
+  }
+  .stats-strip .container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 40px;
+  }
+  .stat .num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .stat .num em { color: var(--terracotta); font-style: italic; }
+  .stat .lbl {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 10px;
+    max-width: 140px;
+    line-height: 1.5;
+  }
+
+  /* ───────── Section: Problem ───────── */
+  section.problem {
+    padding: 140px 0;
+    background: var(--cream);
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    margin-bottom: 80px;
+    align-items: end;
+  }
+  .section-head h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 72px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .section-head h2 em { font-style: italic; color: var(--sage-deep); }
+  .section-head .lede {
+    font-size: 18px;
+    color: var(--ink-soft);
+    max-width: 460px;
+    line-height: 1.55;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .problem-card {
+    background: var(--paper);
+    padding: 48px 36px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background .3s;
+  }
+  .problem-card:hover { background: #FFFCF4; }
+  .problem-card .num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--terracotta);
+  }
+  .problem-card h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    line-height: 1.15;
+    margin-top: 60px;
+    color: var(--ink);
+  }
+  .problem-card p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-top: 16px;
+    margin-bottom: 0;
+  }
+
+  /* ───────── Section: Photo break ───────── */
+  section.photo-break {
+    position: relative;
+    height: 80vh;
+    min-height: 600px;
+    overflow: hidden;
+    background: var(--moss);
+  }
+  section.photo-break .photo {
+    position: absolute;
+    top: -80px; left: 0; right: 0; bottom: -80px;
+    background-image: url("assets/photo-misty-ridge.jpg");
+    background-size: cover;
+    background-position: center 60%;
+    will-change: transform;
+  }
+  /* Tonal grade — warm the photo toward the page palette + ensure text legibility */
+  section.photo-break .photo::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(14, 36, 24, 0.0) 0%, rgba(14, 36, 24, 0.0) 40%, rgba(14, 36, 24, 0.45) 75%, rgba(14, 36, 24, 0.78) 100%);
+    pointer-events: none;
+  }
+  section.photo-break .photo::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 30% 30%, rgba(226, 168, 92, 0.18), transparent 60%);
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+  section.photo-break .quote {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 12%;
+    text-align: center;
+    color: var(--cream);
+    padding: 0 56px;
+  }
+  section.photo-break .quote .lead {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 880px;
+    margin: 0 auto;
+    text-wrap: pretty;
+  }
+  section.photo-break .quote .lead em {
+    font-style: italic;
+    color: var(--sun);
+  }
+  section.photo-break .quote .attrib {
+    margin-top: 24px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(242, 237, 227, 0.6);
+  }
+
+  /* ───────── Section: Capabilities ───────── */
+  section.capabilities {
+    padding: 140px 0;
+    background: var(--moss);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+  section.capabilities .eyebrow { color: var(--sage); }
+  section.capabilities .eyebrow::before { background: var(--sage); }
+  section.capabilities .section-head h2 { color: var(--cream); }
+  section.capabilities .section-head h2 em { color: var(--sun); }
+  section.capabilities .section-head .lede { color: rgba(242, 237, 227, 0.7); }
+
+  .cap-mark {
+    position: absolute;
+    right: -10%; top: -10%;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168, 181, 158, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px 32px;
+    position: relative;
+    z-index: 2;
+  }
+  .cap-item {
+    border-top: 1px solid rgba(242, 237, 227, 0.18);
+    padding-top: 28px;
+  }
+  .cap-item .cap-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--sage);
+    margin-bottom: 18px;
+  }
+  .cap-item h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 30px;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+  .cap-item p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(242, 237, 227, 0.65);
+    margin: 0;
+  }
+  .cap-item .glyph {
+    width: 36px; height: 36px;
+    margin-bottom: 22px;
+    color: var(--sun);
+  }
+
+  /* ───────── Section: Conversation moment ───────── */
+  section.moment {
+    padding: 140px 0;
+    background: var(--cream);
+  }
+  .moment-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .moment-text h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .moment-text h2 em { font-style: italic; color: var(--sage-deep); }
+  .moment-text .when {
+    margin-top: 24px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .moment-text p {
+    margin-top: 20px;
+    font-size: 17px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 420px;
+  }
+
+  .convo {
+    background: var(--paper);
+    border-radius: 18px;
+    padding: 36px;
+    border: 0.5px solid var(--line);
+    box-shadow: 0 30px 60px -30px rgba(60, 40, 20, 0.18);
+    position: relative;
+  }
+  .convo-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 22px;
+    border-bottom: 0.5px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .convo-head .who {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .convo-head .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #E5C498, var(--terracotta));
+  }
+  .convo-head .name { font-size: 14px; }
+  .convo-head .name small { display: block; color: var(--muted); font-size: 11px; }
+  .convo-head .time {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .bubble {
+    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.45;
+    margin-bottom: 14px;
+  }
+  .bubble.user {
+    background: var(--ink);
+    color: var(--paper);
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.ai {
+    background: var(--cream-2);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+  }
+  .bubble.ai em { color: var(--sage-deep); font-style: italic; }
+  .typing {
+    display: inline-flex; gap: 4px; align-items: center;
+  }
+  .typing span {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--sage-deep);
+    animation: bounce 1.4s infinite ease-in-out;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* ───────── Section: Architecture ───────── */
+  section.arch {
+    padding: 140px 0;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .arch-diagram {
+    margin-top: 80px;
+    position: relative;
+    padding: 60px 0;
+  }
+  .arch-svg-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+  }
+  .arch-canvas {
+    width: 100%;
+    max-width: 980px;
+    aspect-ratio: 16 / 9;
+    position: relative;
+  }
+  .node {
+    position: absolute;
+    background: var(--paper);
+    border: 0.5px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 13px;
+    box-shadow: 0 8px 20px -10px rgba(0,0,0,0.08);
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+  .node .swatch {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .node.center {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 22px 30px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    border-radius: 100px;
+  }
+  .node.center .swatch { background: var(--sun); width: 10px; height: 10px; }
+
+  /* ───────── Trust / Azure ───────── */
+  section.trust {
+    padding: 120px 0;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+  }
+  .trust-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .trust-grid h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .trust-grid h2 em { font-style: italic; color: var(--sage-deep); }
+  .trust-grid .sub { color: var(--ink-soft); margin-top: 18px; font-size: 16px; }
+
+  .trust-table {
+    border-top: 1px solid var(--line);
+  }
+  .trust-row {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .trust-row .label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .trust-row .name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .trust-row .badge {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--sage-deep);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ───────── Closing CTA ───────── */
+  section.closing {
+    padding: 160px 0 120px;
+    background: var(--moss);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+  section.closing::before {
+    content: "";
+    position: absolute;
+    top: -300px; left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(226, 168, 92, 0.18) 0%, transparent 60%);
+  }
+  .closing-inner {
+    position: relative;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .closing h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 96px;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--cream);
+  }
+  .closing h2 em { font-style: italic; color: var(--sun); }
+  .closing p {
+    font-size: 18px;
+    color: rgba(242, 237, 227, 0.7);
+    margin: 28px auto 44px;
+    max-width: 480px;
+    line-height: 1.55;
+  }
+  .closing .btn-primary {
+    background: var(--sun);
+    color: var(--ink);
+    padding: 18px 28px;
+    font-size: 15px;
+  }
+  .closing .btn-primary .arrow { background: var(--ink); color: var(--sun); }
+  .closing .btn-primary:hover { background: var(--terracotta); color: var(--cream); }
+
+  /* Footer */
+  footer {
+    background: var(--moss);
+    color: rgba(242, 237, 227, 0.55);
+    padding: 40px 0 60px;
+    border-top: 1px solid rgba(242, 237, 227, 0.1);
+    font-size: 12px;
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: 0.08em;
+  }
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+</style>
+<body>
+
+<nav class="top">
+  <div class="container">
+    <div class="brand">
+      <span class="dot"></span>
+      Serena
+    </div>
+    <div class="nav-links">
+      <a href="#">Approach</a>
+      <a href="#">Capabilities</a>
+      <a href="#">Architecture</a>
+      <a href="#">Journal</a>
+    </div>
+    <a href="demo.html" class="nav-cta">Try the demo</a>
+  </div>
+</nav>
+
+<!-- ───────── HERO ───────── -->
+<section class="hero" id="hero">
+  <div class="hero-arc"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow" style="margin-bottom: 28px;">A wellness companion</div>
+        <h1 id="hero-headline">A quieter<br>kind of <em>care.</em></h1>
+        <p class="hero-sub">She listens. She offers one small thing.</p>
+        <div class="hero-actions">
+          <a href="demo.html" class="btn-primary">
+            Begin the demo
+            <span class="arrow">→</span>
+          </a>
+          <a href="#" class="btn-ghost">Read the philosophy</a>
+        </div>
+      </div>
+
+      <div class="hero-art" id="hero-art">
+        <div class="frame">
+          <div class="photo" id="hero-photo"></div>
+        </div>
+        <div class="caption">
+          <span class="mono">07:42 · TUESDAY</span>
+          <span class="who">"Your favorite mug. Cool morning light. Take it slow today."</span>
+        </div>
+        <div class="meta-tag">
+          <span class="pulse"></span>
+          Listening
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats strip -->
+<div class="stats-strip">
+  <div class="container">
+    <div class="stat">
+      <div class="num">11<em>k</em></div>
+      <div class="lbl">apps tested in user trial</div>
+    </div>
+    <div class="stat">
+      <div class="num">3.4<em>%</em></div>
+      <div class="lbl">retention after 30 days</div>
+    </div>
+    <div class="stat">
+      <div class="num">68<em>%</em></div>
+      <div class="lbl">say apps feel impersonal</div>
+    </div>
+    <div class="stat">
+      <div class="num">200<em>ms</em></div>
+      <div class="lbl">end-to-end response</div>
+    </div>
+    <div class="stat">
+      <div class="num">7<em>×</em></div>
+      <div class="lbl">specialist agents in concert</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── PROBLEM ───────── -->
+<section class="problem">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 24px;">Why Serena</div>
+        <h2>The wellness app<br>ecosystem is <em style="font-style: normal;">noisy.</em></h2>
+      </div>
+      <p class="lede">Eleven apps for sleep, meals, breath, mood, hydration, steps, journaling, focus, supplements, cycles, and screen time. None of them speak to each other. None of them know who you are.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="num">i.</div>
+        <div>
+          <h3>Disconnected by design.</h3>
+          <p>Your sleep tracker doesn't know you skipped lunch. Your meditation app doesn't know you're anxious about Thursday's presentation. Each app holds a fragment.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="num">ii.</div>
+        <div>
+          <h3>Loud when you need quiet.</h3>
+          <p>Streaks, badges, push notifications, leaderboards. Wellness has been gamified into another thing demanding your attention.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="num">iii.</div>
+        <div>
+          <h3>Generic where it should be personal.</h3>
+          <p>The same nudge whether you've slept four hours or eight. The same prompt whether you're grieving or thriving. Care without context.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── PHOTO BREAK ───────── -->
+<section class="photo-break">
+  <div class="photo" data-parallax-photo></div>
+  <blockquote class="quote">
+    <p class="lead">A garden tended <em>slowly</em><br>holds more than one tended fast.</p>
+    <div class="attrib">— design principle, Serena</div>
+  </blockquote>
+</section>
+
+<!-- ───────── CAPABILITIES ───────── -->
+<section class="capabilities">
+  <div class="cap-mark"></div>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 24px;">Three capabilities</div>
+        <h2>One <em style="font-style: normal;">intelligent</em><br>system.</h2>
+      </div>
+      <p class="lede">Serena is not a chatbot stitched onto a fitness tracker. She's a coordinated system of specialized agents — each doing one thing well, all sharing the same memory of you.</p>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap-item">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+        <div class="cap-num">01 / Memory</div>
+        <h3>She remembers.</h3>
+        <p>Not just preferences — context. The week your father was in hospital. The summer you started running. The morning you finally slept eight hours.</p>
+      </div>
+      <div class="cap-item">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 12c2-4 6-6 9-6s7 2 9 6"></path><path d="M3 12c2 4 6 6 9 6s7-2 9-6"></path><circle cx="12" cy="12" r="2"></circle></svg>
+        <div class="cap-num">02 / Reasoning</div>
+        <h3>She connects.</h3>
+        <p>Sleep, mood, nutrition, movement, schedule — held together as one picture, not seven dashboards. Patterns surface gently, on their own time.</p>
+      </div>
+      <div class="cap-item">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14"></path><path d="M12 5v14"></path><circle cx="12" cy="12" r="9"></circle></svg>
+        <div class="cap-num">03 / Restraint</div>
+        <h3>She holds back.</h3>
+        <p>The hardest engineering problem: knowing when not to speak. Serena offers one suggestion when one is enough. Often, none at all.</p>
+      </div>
+      <div class="cap-item">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 8h16M4 12h10M4 16h7"></path></svg>
+        <div class="cap-num">04 / Voice</div>
+        <h3>She writes well.</h3>
+        <p>Tuned by writers, not prompt engineers. No bullet points unless you need them. No exclamation points. No "I'm sorry to hear that."</p>
+      </div>
+      <div class="cap-item">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M9 9h6v6H9z"></path></svg>
+        <div class="cap-num">05 / Privacy</div>
+        <h3>She forgets when asked.</h3>
+        <p>Your data never leaves your tenant. Memory is editable, exportable, and deletable. A forget-me checkbox lives in every conversation.</p>
+      </div>
+      <div class="cap-item">
+        <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 18l4-4 4 4 4-8 6 8"></path></svg>
+        <div class="cap-num">06 / Reliability</div>
+        <h3>She's there at 3am.</h3>
+        <p>99.97% uptime on Azure. Sub-200ms response. Graceful degradation when she's uncertain — she'd rather say "I don't know" than guess.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CONVERSATION MOMENT ───────── -->
+<section class="moment">
+  <div class="container">
+    <div class="moment-wrap">
+      <div class="moment-text">
+        <div class="eyebrow" style="margin-bottom: 24px;">A small moment</div>
+        <h2>It's 9pm<br>on a <em style="font-style: normal;">Tuesday.</em></h2>
+        <div class="when">A typical exchange · unedited</div>
+        <p>You haven't messaged Serena in two days. She hasn't messaged you either. Then you open the app. She remembers exactly where you left off.</p>
+      </div>
+
+      <div class="convo">
+        <div class="convo-head">
+          <div class="who">
+            <div class="avatar"></div>
+            <div class="name">
+              Serena
+              <small>warm · attentive · brief</small>
+            </div>
+          </div>
+          <div class="time">21:04</div>
+        </div>
+
+        <div class="bubble user">My head's been pounding all afternoon.</div>
+        <div class="bubble ai">That's the third time this week. <em>Have you eaten since lunch?</em></div>
+        <div class="bubble user">…no.</div>
+        <div class="bubble ai">Start there. Something with salt. The presentation tomorrow can wait twenty minutes.</div>
+        <div class="bubble ai" style="background: transparent; padding: 8px 18px;">
+          <span class="typing"><span></span><span></span><span></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── ARCHITECTURE ───────── -->
+<section class="arch">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 24px;">Architecture</div>
+        <h2>Hub and spoke,<br><em style="font-style: normal;">not</em> a wall of chatbots.</h2>
+      </div>
+      <p class="lede">A central orchestrator routes each message to the right specialist — or holds it, when nothing needs to be said. Specialists never talk to the user directly. The voice you hear is always Serena's.</p>
+    </div>
+
+    <div class="arch-diagram">
+      <div class="arch-svg-wrap">
+        <div class="arch-canvas" id="arch-canvas">
+          <!-- SVG connections -->
+          <svg viewBox="0 0 980 550" style="position:absolute; inset:0; width:100%; height:100%;" preserveAspectRatio="none">
+            <defs>
+              <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse">
+                <circle cx="3" cy="3" r="0.6" fill="#A8B59E"></circle>
+              </pattern>
+            </defs>
+            <g stroke="#A8B59E" stroke-width="0.8" fill="none" stroke-dasharray="3 3" opacity="0.7">
+              <path d="M490 275 L160 90"></path>
+              <path d="M490 275 L490 80"></path>
+              <path d="M490 275 L820 90"></path>
+              <path d="M490 275 L120 275"></path>
+              <path d="M490 275 L860 275"></path>
+              <path d="M490 275 L160 460"></path>
+              <path d="M490 275 L490 470"></path>
+              <path d="M490 275 L820 460"></path>
+            </g>
+          </svg>
+
+          <div class="node center" style="left:50%; top:50%;">
+            <span class="swatch"></span>
+            Orchestrator
+          </div>
+
+          <div class="node" style="left: 16%; top: 16%;"><span class="swatch" style="background:#C97B5A"></span>Sleep agent</div>
+          <div class="node" style="left: 50%; top: 14%;"><span class="swatch" style="background:#E2A85C"></span>Nutrition agent</div>
+          <div class="node" style="left: 84%; top: 16%;"><span class="swatch" style="background:#6E8170"></span>Mood agent</div>
+          <div class="node" style="left: 12%; top: 50%;"><span class="swatch" style="background:#A8B59E"></span>Movement agent</div>
+          <div class="node" style="left: 88%; top: 50%;"><span class="swatch" style="background:#8FA88F"></span>Calendar agent</div>
+          <div class="node" style="left: 16%; top: 84%;"><span class="swatch" style="background:#C97B5A"></span>Memory store</div>
+          <div class="node" style="left: 50%; top: 86%;"><span class="swatch" style="background:#E2A85C"></span>Voice &amp; tone</div>
+          <div class="node" style="left: 84%; top: 84%;"><span class="swatch" style="background:#6E8170"></span>Safety</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── TRUST / Azure ───────── -->
+<section class="trust">
+  <div class="container">
+    <div class="trust-grid">
+      <div>
+        <div class="eyebrow" style="margin-bottom: 24px;">Foundation</div>
+        <h2>Quietly powered by <em style="font-style: normal;">Azure.</em></h2>
+        <p class="sub">Enterprise-grade infrastructure, invisible to the people using it.</p>
+      </div>
+      <div class="trust-table">
+        <div class="trust-row">
+          <span class="label">Models</span>
+          <span class="name">Azure OpenAI · GPT-class reasoning</span>
+          <span class="badge">Tenant-isolated</span>
+        </div>
+        <div class="trust-row">
+          <span class="label">Memory</span>
+          <span class="name">Cosmos DB · vector + structured store</span>
+          <span class="badge">Encrypted at rest</span>
+        </div>
+        <div class="trust-row">
+          <span class="label">Orchestration</span>
+          <span class="name">Semantic Kernel · agent routing</span>
+          <span class="badge">Audited</span>
+        </div>
+        <div class="trust-row">
+          <span class="label">Compliance</span>
+          <span class="name">HIPAA · SOC 2 Type II · GDPR</span>
+          <span class="badge">Certified</span>
+        </div>
+        <div class="trust-row">
+          <span class="label">Latency</span>
+          <span class="name">Edge inference · 6 regions</span>
+          <span class="badge">&lt;200ms p95</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CLOSING ───────── -->
+<section class="closing">
+  <div class="closing-inner">
+    <div class="eyebrow" style="margin-bottom: 32px; color: var(--sage);">A 60-second demo</div>
+    <h2>Meet someone<br>who <em style="font-style: normal;">listens.</em></h2>
+    <p>No signup. No download. Just a conversation in your browser, ending whenever you want it to.</p>
+    <a href="demo.html" class="btn-primary">
+      Begin the demo
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>SERENA · A WELLNESS COMPANION · v0.4</span>
+    <span>BUILT QUIETLY · 2026</span>
+  </div>
+</footer>
+
+
+<script>
+/* Hero parallax — slow, calm, respects reduced-motion */
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var heroPhoto = document.getElementById('hero-photo');
+  var photo     = document.querySelector('[data-parallax-photo]');
+  var ticking = false;
+  function update() {
+    var y = window.scrollY || window.pageYOffset || 0;
+    if (heroPhoto) {
+      // Gentle Ken Burns drift on scroll — clamped so it never reveals the frame edge
+      var t = Math.max(-30, Math.min(30, y * 0.06));
+      heroPhoto.style.transform = 'translate3d(0,' + t + 'px,0)';
+    }
+    if (photo) {
+      var rect = photo.getBoundingClientRect();
+      var center = rect.top + rect.height / 2 - window.innerHeight / 2;
+      var t2 = Math.max(-40, Math.min(40, center * -0.06));
+      photo.style.transform = 'translate3d(0,' + t2 + 'px,0)';
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
+})();
+</script>
+
+</body></html>
