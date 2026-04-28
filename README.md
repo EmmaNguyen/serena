@@ -187,11 +187,11 @@ python -m pytest tests/test_security.py -v
 # API/unit tests only (39 tests)
 python -m pytest tests/test_api.py -v
 
-# With coverage
-python -m pytest tests/ --cov=serena_agents --cov-report=html
-
 # Node.js API handler tests (16 tests, requires Node >= 18)
 node --test tests/test_api_handler.js
+
+# With coverage
+python -m pytest tests/ --cov=serena_agents --cov-report=html
 ```
 
 JavaScript security tests (10 tests): open `tests/test_js_security.html` in a browser — they run automatically on load.

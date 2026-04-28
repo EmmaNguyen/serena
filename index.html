@@ -4,7 +4,7 @@
 
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=1440">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Serena — A quieter kind of wellness AI</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -343,7 +343,7 @@
   }
   .stats-strip .container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 40px;
   }
   .stat .num {
@@ -814,6 +814,75 @@
     align-items: center;
   }
 
+  /* ───────── Responsive ───────── */
+
+  /* Tablet — 900px */
+  @media (max-width: 900px) {
+    .container { padding: 0 32px; }
+
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero h1 { font-size: 96px; }
+    .hero-art { max-width: 480px; margin: 0 auto; }
+
+    .stats-strip .container { grid-template-columns: repeat(2, 1fr); gap: 24px 40px; }
+
+    .section-head { grid-template-columns: 1fr; gap: 24px; margin-bottom: 48px; }
+    .section-head h2 { font-size: 52px; }
+
+    .problem-grid { grid-template-columns: 1fr; }
+    .cap-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .moment-wrap { grid-template-columns: 1fr; }
+    .convo { max-width: 100%; }
+
+    .trust-grid { grid-template-columns: 1fr; gap: 40px; }
+    .trust-grid h2 { font-size: 42px; }
+    .trust-row { grid-template-columns: 140px 1fr auto; }
+
+    .arch-canvas { aspect-ratio: unset; height: 440px; }
+
+    .closing h2 { font-size: 64px; }
+  }
+
+  /* Mobile — 600px */
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+
+    nav.top { padding: 18px 0; }
+    .nav-links { display: none; }
+
+    .hero { padding: 48px 0 80px; }
+    .hero h1 { font-size: 64px; }
+    .hero-sub { font-size: 16px; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+    .stats-strip .container { grid-template-columns: repeat(2, 1fr); gap: 20px 24px; }
+    .stat .num { font-size: 40px; }
+
+    section.problem,
+    section.capabilities,
+    section.moment,
+    section.arch,
+    section.trust { padding: 72px 0; }
+
+    .section-head h2 { font-size: 40px; }
+    .section-head .lede { font-size: 16px; }
+
+    .problem-card { padding: 32px 24px; min-height: unset; }
+    .cap-grid { grid-template-columns: 1fr; }
+
+    .trust-row { grid-template-columns: 1fr; gap: 6px; }
+    .trust-row .name { font-size: 17px; }
+
+    .arch-canvas { height: 320px; }
+    .node { font-size: 11px; padding: 10px 12px; }
+    .node.center { font-size: 16px; padding: 14px 20px; }
+
+    .closing { padding: 80px 0 72px; }
+    .closing h2 { font-size: 48px; }
+    .closing p { font-size: 16px; }
+  }
+
 </style>
 <body>
 
@@ -847,7 +916,7 @@
             Begin the demo
             <span class="arrow">→</span>
           </a>
-          <a href="#" class="btn-ghost">Read the philosophy</a>
+          <a href="#philosophy" class="btn-ghost">Read the philosophy</a>
         </div>
       </div>
 
@@ -872,59 +941,55 @@
 <div class="stats-strip">
   <div class="container">
     <div class="stat">
-      <div class="num">11<em>k</em></div>
-      <div class="lbl">apps tested in user trial</div>
+      <div class="num">5</div>
+      <div class="lbl">specialist agents in concert</div>
     </div>
     <div class="stat">
-      <div class="num">3.4<em>%</em></div>
-      <div class="lbl">retention after 30 days</div>
-    </div>
-    <div class="stat">
-      <div class="num">68<em>%</em></div>
-      <div class="lbl">say apps feel impersonal</div>
+      <div class="num">3</div>
+      <div class="lbl">core capabilities: mind, journal, habit</div>
     </div>
     <div class="stat">
       <div class="num">200<em>ms</em></div>
       <div class="lbl">end-to-end response</div>
     </div>
     <div class="stat">
-      <div class="num">7<em>×</em></div>
-      <div class="lbl">specialist agents in concert</div>
+      <div class="num">0</div>
+      <div class="lbl">guilt mechanics. ever.</div>
     </div>
   </div>
 </div>
 
 <!-- ───────── PROBLEM ───────── -->
-<section class="problem">
+<section class="problem" id="philosophy">
   <div class="container">
     <div class="section-head">
       <div>
         <div class="eyebrow" style="margin-bottom: 24px;">Why Serena</div>
         <h2>The wellness app<br>ecosystem is <em style="font-style: normal;">noisy.</em></h2>
       </div>
-      <p class="lede">Eleven apps for sleep, meals, breath, mood, hydration, steps, journaling, focus, supplements, cycles, and screen time. None of them speak to each other. None of them know who you are.</p>
+      <p class="lede">Most wellness apps are abandoned within days of download. The apps don't know their users — so why would they stay? Serena is built around the three things every other app gets wrong.</p>
     </div>
 
     <div class="problem-grid">
       <div class="problem-card">
         <div class="num">i.</div>
         <div>
-          <h3>Disconnected by design.</h3>
-          <p>Your sleep tracker doesn't know you skipped lunch. Your meditation app doesn't know you're anxious about Thursday's presentation. Each app holds a fragment.</p>
+          <h3>They start cold.</h3>
+          <p>Every session, you re-explain yourself. Your context, your history, what's been hard lately. The app has no memory. Neither does the next one you try.</p>
         </div>
       </div>
       <div class="problem-card">
         <div class="num">ii.</div>
         <div>
-          <h3>Loud when you need quiet.</h3>
-          <p>Streaks, badges, push notifications, leaderboards. Wellness has been gamified into another thing demanding your attention.</p>
+          <h3>They punish you.</h3>
+          <p>Missed your streak? Red X. Guilt trip. Churn. The apps built to support you become another source of pressure on the days you needed support most.</p>
         </div>
       </div>
       <div class="problem-card">
         <div class="num">iii.</div>
         <div>
-          <h3>Generic where it should be personal.</h3>
-          <p>The same nudge whether you've slept four hours or eight. The same prompt whether you're grieving or thriving. Care without context.</p>
+          <h3>They're generic.</h3>
+          <p>The same breathing script for everyone, regardless of what you actually need right now. Care without context isn't care — it's content.</p>
         </div>
       </div>
     </div>
@@ -946,10 +1011,10 @@
   <div class="container">
     <div class="section-head">
       <div>
-        <div class="eyebrow" style="margin-bottom: 24px;">Three capabilities</div>
-        <h2>One <em style="font-style: normal;">intelligent</em><br>system.</h2>
+        <div class="eyebrow" style="margin-bottom: 24px;">Six principles</div>
+        <h2>One <em style="font-style: normal;">coherent</em><br>system.</h2>
       </div>
-      <p class="lede">Serena is not a chatbot stitched onto a fitness tracker. She's a coordinated system of specialized agents — each doing one thing well, all sharing the same memory of you.</p>
+      <p class="lede">Serena is not a chatbot stitched onto a habit tracker. She's a coordinated system of specialized agents — each doing one thing well, all sharing the same memory of you.</p>
     </div>
 
     <div class="cap-grid">
@@ -1036,7 +1101,7 @@
         <div class="eyebrow" style="margin-bottom: 24px;">Architecture</div>
         <h2>Hub and spoke,<br><em style="font-style: normal;">not</em> a wall of chatbots.</h2>
       </div>
-      <p class="lede">A central orchestrator routes each message to the right specialist — or holds it, when nothing needs to be said. Specialists never talk to the user directly. The voice you hear is always Serena's.</p>
+      <p class="lede">A central Orchestrator classifies intent and routes each message to the right specialist — Mindfulness, Journaling, or Habit Coach. All agents share the same Memory Agent context. The voice you hear is always Serena's.</p>
     </div>
 
     <div class="arch-diagram">
@@ -1066,14 +1131,14 @@
             Orchestrator
           </div>
 
-          <div class="node" style="left: 16%; top: 16%;"><span class="swatch" style="background:#C97B5A"></span>Sleep agent</div>
-          <div class="node" style="left: 50%; top: 14%;"><span class="swatch" style="background:#E2A85C"></span>Nutrition agent</div>
-          <div class="node" style="left: 84%; top: 16%;"><span class="swatch" style="background:#6E8170"></span>Mood agent</div>
-          <div class="node" style="left: 12%; top: 50%;"><span class="swatch" style="background:#A8B59E"></span>Movement agent</div>
-          <div class="node" style="left: 88%; top: 50%;"><span class="swatch" style="background:#8FA88F"></span>Calendar agent</div>
-          <div class="node" style="left: 16%; top: 84%;"><span class="swatch" style="background:#C97B5A"></span>Memory store</div>
-          <div class="node" style="left: 50%; top: 86%;"><span class="swatch" style="background:#E2A85C"></span>Voice &amp; tone</div>
-          <div class="node" style="left: 84%; top: 84%;"><span class="swatch" style="background:#6E8170"></span>Safety</div>
+          <div class="node" style="left: 16%; top: 16%;"><span class="swatch" style="background:#6E8170"></span>Mindfulness Coach</div>
+          <div class="node" style="left: 50%; top: 14%;"><span class="swatch" style="background:#E2A85C"></span>Journaling Agent</div>
+          <div class="node" style="left: 84%; top: 16%;"><span class="swatch" style="background:#C97B5A"></span>Habit Coach</div>
+          <div class="node" style="left: 12%; top: 50%;"><span class="swatch" style="background:#A8B59E"></span>Memory Agent</div>
+          <div class="node" style="left: 88%; top: 50%;"><span class="swatch" style="background:#8FA88F"></span>Insights Pipeline</div>
+          <div class="node" style="left: 16%; top: 84%;"><span class="swatch" style="background:#5E7A62"></span>Azure OpenAI</div>
+          <div class="node" style="left: 50%; top: 86%;"><span class="swatch" style="background:#E2A85C"></span>Azure AI Search</div>
+          <div class="node" style="left: 84%; top: 84%;"><span class="swatch" style="background:#6E8170"></span>Cosmos DB</div>
         </div>
       </div>
     </div>
@@ -1092,28 +1157,28 @@
       <div class="trust-table">
         <div class="trust-row">
           <span class="label">Models</span>
-          <span class="name">Azure OpenAI · GPT-class reasoning</span>
-          <span class="badge">Tenant-isolated</span>
+          <span class="name">Azure OpenAI · GPT-4o primary · GPT-4o-mini routing</span>
+          <span class="badge">Server-side keys</span>
         </div>
         <div class="trust-row">
           <span class="label">Memory</span>
-          <span class="name">Cosmos DB · vector + structured store</span>
-          <span class="badge">Encrypted at rest</span>
+          <span class="name">Redis Cache → Cosmos DB → Azure AI Search</span>
+          <span class="badge">Tiered context</span>
         </div>
         <div class="trust-row">
           <span class="label">Orchestration</span>
-          <span class="name">Semantic Kernel · agent routing</span>
-          <span class="badge">Audited</span>
+          <span class="name">Python multi-agent · intent classify + route</span>
+          <span class="badge">5 specialists</span>
         </div>
         <div class="trust-row">
-          <span class="label">Compliance</span>
-          <span class="name">HIPAA · SOC 2 Type II · GDPR</span>
-          <span class="badge">Certified</span>
+          <span class="label">Journals</span>
+          <span class="name">Azure Blob Storage · encrypted at rest</span>
+          <span class="badge">User-owned</span>
         </div>
         <div class="trust-row">
-          <span class="label">Latency</span>
-          <span class="name">Edge inference · 6 regions</span>
-          <span class="badge">&lt;200ms p95</span>
+          <span class="label">Sentiment</span>
+          <span class="name">GPT-4o-mini · Azure AI Language when configured</span>
+          <span class="badge">Optional</span>
         </div>
       </div>
     </div>
@@ -1135,8 +1200,8 @@
 
 <footer>
   <div class="container">
-    <span>SERENA · A WELLNESS COMPANION · v0.4</span>
-    <span>BUILT QUIETLY · 2026</span>
+    <span>SERENA · MINDFULNESS · JOURNALING · HABITS</span>
+    <span>BUILT FOR THE 2026 HACKATHON</span>
   </div>
 </footer>
 
