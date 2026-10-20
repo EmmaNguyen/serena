@@ -4,9 +4,11 @@
 
 > A multi-agent AI system that meets you where you are — not where productivity culture says you should be.
 
+🏆 **Hackathon:** [Microsoft Code Without Borders Hackathon, Southeast Asia, 2026 (winner)](https://www.linkedin.com/feed/update/urn:li:activity:7475126308986007553/)
+
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-0078D4?style=for-the-badge&logo=microsoftazure)](https://your-app.azurestaticapps.net)
 [![Built with Azure OpenAI](https://img.shields.io/badge/Azure%20OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
-[![Hackathon](https://img.shields.io/badge/Hackathon-2026-F59E0B?style=for-the-badge)]()
+[![Winner](https://img.shields.io/badge/🏆%20Winner-Microsoft%20Code%20Without%20Borders%20SEA%202026-F59E0B?style=for-the-badge)](https://www.linkedin.com/feed/update/urn:li:activity:7475126308986007553/)
 
 ---
 
@@ -223,7 +225,7 @@ See [`tests/TEST_SUMMARY.md`](tests/TEST_SUMMARY.md) for the full test inventory
 
 ## Team
 
-Built for the 2026 Hackathon.
+Winner of the Microsoft Code Without Borders Hackathon, Southeast Asia, 2026.
 
 ---
 
