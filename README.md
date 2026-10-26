@@ -6,7 +6,7 @@
 
 🏆 **Hackathon:** [Microsoft Code Without Borders Hackathon, Southeast Asia, 2026 (winner)](https://www.linkedin.com/feed/update/urn:li:activity:7475126308986007553/)
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-0078D4?style=for-the-badge&logo=microsoftazure)](https://your-app.azurestaticapps.net)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Azure%20Static%20Web%20Apps-0078D4?style=for-the-badge&logo=microsoftazure)](https://serena.lab2026.com)
 [![Built with Azure OpenAI](https://img.shields.io/badge/Azure%20OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 [![Winner](https://img.shields.io/badge/🏆%20Winner-Microsoft%20Code%20Without%20Borders%20SEA%202026-F59E0B?style=for-the-badge)](https://www.linkedin.com/feed/update/urn:li:activity:7475126308986007553/)
 
@@ -41,7 +41,7 @@ Serena is a **context-first, multi-agent AI system** built on Azure. Instead of 
 
 ## Live Demo
 
-🔗 **[Try the interactive demo →](https://your-app.azurestaticapps.net)**
+🔗 **[Try the interactive demo →](https://serena.lab2026.com)**
 
 The demo runs entirely client-side — no API keys or sign-up required. Use the sidebar buttons to walk through three scripted scenes, or type freely to explore the routing logic.
 
